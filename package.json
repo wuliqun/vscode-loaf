@@ -1,0 +1,88 @@
+{
+  "name": "vscode-loaf",
+  "displayName": "vscode-loaf",
+  "description": "loaf by vscode",
+  "version": "1.0.0",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscode-loaf.loafStart",
+        "title": "Start to loaf"
+      },
+      {
+        "command": "vscode-loaf.nextPage",
+        "title": "Go to next page"
+      },
+      {
+        "command": "vscode-loaf.prevPage",
+        "title": "Go to previous page"
+      },
+      {
+        "command": "vscode-loaf.switchBook",
+        "title": "Switch book"
+      },
+      {
+        "command": "vscode-loaf.searchPage",
+        "title": "Search new line"
+      },
+      {
+        "command": "vscode-loaf.loafEnd",
+        "title": "End of loaf"
+      }
+    ],
+    "keybindings":[
+      {
+        "command": "vscode-loaf.nextPage",
+        "key": "tab",
+        "when": "editorLangId == 'cpp'"
+      },
+      {
+        "command": "vscode-loaf.prevPage",
+        "key": "left",
+        "when": "editorLangId == 'cpp'"
+      },
+      {
+        "command": "vscode-loaf.loafEnd",
+        "key": "x x",
+        "when": "editorLangId == 'cpp'"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "pnpm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "pnpm run compile && pnpm run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.75.0",
+    "@typescript-eslint/eslint-plugin": "^5.59.2",
+    "@typescript-eslint/parser": "^5.59.2",
+    "@vscode/test-electron": "^2.3.0",
+    "@vue/eslint-config-prettier": "^7.1.0",
+    "eslint": "^8.40.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^9.11.1",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "prettier": "^2.8.8",
+    "typescript": "^5.0.4",
+    "vue-eslint-parser": "^9.2.1"
+  },
+  "dependencies": {
+    "iconv-lite": "^0.6.3"
+  }
+}
