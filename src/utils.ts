@@ -16,8 +16,7 @@ function readFile(filePath: string) {
   return content;
 }
 
-const novelFileStr = `
-#include <iostream>
+const novelFileStr = `#include <iostream>
 #include <thread>
 #include <unistd.h>
 #include <cassert>

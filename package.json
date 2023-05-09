@@ -40,6 +40,10 @@
     ],
     "keybindings": [
       {
+        "command": "vscode-loaf.loafStart",
+        "key": "pagedown pagedown"
+      },
+      {
         "command": "vscode-loaf.nextPage",
         "key": "tab",
         "when": "editorLangId == 'cpp'"
@@ -57,15 +61,21 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "pnpm run compile",
-    "release": "pnpm vsce package --no-dependencies",
+    "vscode:prepublish": "yarn run compile",
+    "build":"vsce package --no-yarn",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "pretest": "pnpm run compile && pnpm run lint",
+    "pretest": "yarn run compile && yarn run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js"
   },
-  "devDependencies": {
+  "devDependencies": {    
+  },
+  "repository": {
+    "url": "https://github.com/wuliqun/vscode-loaf"
+  },
+  "dependencies": {
+    "@vscode/vsce": "^2.19.0",
     "@types/glob": "^8.1.0",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
@@ -78,14 +88,11 @@
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-vue": "^9.11.1",
     "glob": "^8.1.0",
+    "iconv-lite": "^0.6.3",
     "mocha": "^10.2.0",
     "prettier": "^2.8.8",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4",
     "vue-eslint-parser": "^9.2.1"
-  },
-  "dependencies": {
-    "@vscode/vsce": "^2.19.0",
-    "iconv-lite": "^0.6.3"
-  },
-  "repository": {"url": "https://github.com/wuliqun/vscode-loaf"}
+  }
 }

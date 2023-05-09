@@ -205,6 +205,7 @@ function endLoaf(context: vscode.ExtensionContext) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+  console.log(111111111);
   context.subscriptions.push(
     vscode.commands.registerCommand("vscode-loaf.loafStart", () => {
       // vscode.window.showInformationMessage("Start loaf");
