@@ -18,6 +18,10 @@
         "title": "Start to loaf"
       },
       {
+        "command": "vscode-loaf.changeFolder",
+        "title": "Chnage books folder"
+      },
+      {
         "command": "vscode-loaf.nextPage",
         "title": "Go to next page"
       },
@@ -46,17 +50,17 @@
       {
         "command": "vscode-loaf.nextPage",
         "key": "tab",
-        "when": "editorLangId == 'cpp'"
+        "when": "resourceFilename =~ /vscode-loaf\\.ts$/"
       },
       {
         "command": "vscode-loaf.prevPage",
         "key": "left",
-        "when": "editorLangId == 'cpp'"
+        "when": "resourceFilename =~ /vscode-loaf\\.ts$/"
       },
       {
         "command": "vscode-loaf.loafEnd",
         "key": "x x",
-        "when": "editorLangId == 'cpp'"
+        "when": "resourceFilename =~ /vscode-loaf\\.ts$/"
       }
     ]
   },

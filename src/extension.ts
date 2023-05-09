@@ -41,7 +41,7 @@ async function getCurrentBook(context: vscode.ExtensionContext) {
     );
     return;
   }
-  const readerFile = path.join(booksPath, "vscode-loaf.cpp");
+  const readerFile = path.join(booksPath, "vscode-loaf.ts");
   if (!fs.existsSync(readerFile)) {
     writeNovelFile(readerFile);
   }
@@ -87,7 +87,7 @@ function showPage(index: number, context: vscode.ExtensionContext) {
   }
   const line = currentBook.lines[index];
   const editor = vscode.window.activeTextEditor;
-  if (!editor || !editor.document.fileName.endsWith("vscode-loaf.cpp")) return;
+  if (!editor || !editor.document.fileName.endsWith("vscode-loaf.ts")) return;
   if (currentBook.startLine < 0) {
     const text = editor.document.getText();
     const m = text.match(/\/\*\*\*\*\*[\s\S]*\*\*\*\*\*\//);
@@ -194,10 +194,23 @@ function endLoaf(context: vscode.ExtensionContext) {
   }
   const editor = vscode.window.activeTextEditor;
 
-  if (!editor || !editor.document.fileName.endsWith("vscode-loaf.cpp")) return;
+  if (!editor || !editor.document.fileName.endsWith("vscode-loaf.ts")) return;
   editor.document.save().then(() => {
     vscode.commands.executeCommand("workbench.action.closeActiveEditor");
   });
+}
+
+async function changeFolder(context: vscode.ExtensionContext) {
+  const result = await vscode.window.showOpenDialog({
+    title: "Select books storage folder",
+    canSelectFiles: false,
+    canSelectFolders: true,
+    canSelectMany: false,
+  });
+  if (result && result[0]) {
+    context.globalState.update(BOOKSPATHKEY, result[0]);
+    getCurrentBook(context);
+  }
 }
 
 export function activate(context: vscode.ExtensionContext) {
@@ -222,6 +235,11 @@ export function activate(context: vscode.ExtensionContext) {
       });
       btnPrev.show();
       btnNext.show();
+    })
+  );
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vscode-loaf.changeFolder", () => {
+      changeFolder(context);
     })
   );
   context.subscriptions.push(
