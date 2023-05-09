@@ -195,25 +195,9 @@ function endLoaf(context: vscode.ExtensionContext) {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor || !editor.document.fileName.endsWith("vscode-loaf.cpp")) return;
-  const reg = /\/\*\*\*\*\*[\s\S]*\*\*\*\*\*\//;
-  const text = editor.document.getText().replace(reg, `/**********/`);
-  editor
-    .edit((editBuilder) => {
-      // 替换文档内容
-      const range = new vscode.Range(
-        0,
-        0,
-        editor.document.lineCount - 1,
-        editor.document.lineAt(editor.document.lineCount - 1).text.length
-      );
-      return editBuilder.replace(range, text);
-    })
-    .then(() => {
-      return editor.document.save();
-    })
-    .then(() => {
-      vscode.commands.executeCommand("workbench.action.closeActiveEditor");
-    });
+  editor.document.save().then(() => {
+    vscode.commands.executeCommand("workbench.action.closeActiveEditor");
+  });
 }
 
 export function activate(context: vscode.ExtensionContext) {
