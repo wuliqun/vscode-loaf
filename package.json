@@ -53,6 +53,11 @@
         "when": "resourceFilename =~ /vscode-loaf\\.ts$/"
       },
       {
+        "command": "vscode-loaf.nextPage",
+        "key": "right",
+        "when": "resourceFilename =~ /vscode-loaf\\.ts$/"
+      },
+      {
         "command": "vscode-loaf.prevPage",
         "key": "left",
         "when": "resourceFilename =~ /vscode-loaf\\.ts$/"
