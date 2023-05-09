@@ -217,12 +217,27 @@ function endLoaf(context: vscode.ExtensionContext) {
 }
 
 export function activate(context: vscode.ExtensionContext) {
+  const btnPrev = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Left
+  );
+  btnPrev.text = "prev";
+  btnPrev.command = "vscode-loaf.prevPage";
+  const btnNext = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Left
+  );
+  btnNext.text = "next";
+  btnNext.command = "vscode-loaf.nextPage";
+  context.subscriptions.push(btnPrev);
+  context.subscriptions.push(btnNext);
+
   context.subscriptions.push(
     vscode.commands.registerCommand("vscode-loaf.loafStart", () => {
       // vscode.window.showInformationMessage("Start loaf");
       getCurrentBook(context).then(() => {
         showPage(currentBook.currentLine, context);
       });
+      btnPrev.show();
+      btnNext.show();
     })
   );
   context.subscriptions.push(
@@ -249,6 +264,8 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(
     vscode.commands.registerCommand("vscode-loaf.loafEnd", () => {
       endLoaf(context);
+      btnPrev.hide();
+      btnNext.hide();
     })
   );
 }
