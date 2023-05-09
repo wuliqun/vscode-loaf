@@ -46,7 +46,6 @@ struct func {
     }
 };
 
-// 特殊情况下的等待
 void f() {
     int some_local_state = 0;
     func my_func(some_local_state);
@@ -61,11 +60,12 @@ void f() {
     t.join();  // 2
 }
 
-// try catch 只能捕获轻量级错误,所以如需确保线程在函数之前结束——查看是否因为线程函数使用了局部变量的引用，
-// 以及其他原因——而后再确定一下程序可能会退出的途径，无论正常与否，可以提供一个简洁的机制，来做解决这个问题。
 
-// 一种方式是使用“资源获取即初始化方式”(RAII，Resource Acquisition Is Initialization)，并且提供一个类，在析构函数中使用join()，
-// std::thread支持移动的好处是可以创建thread_guard类的实例，并且拥有其线程的所有权。
+
+/**********/
+
+
+
 class thread_guard {
     std::thread &t;
 public:

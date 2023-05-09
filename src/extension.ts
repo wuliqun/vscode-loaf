@@ -12,6 +12,7 @@ let currentBook = {
   currentLine: -1,
   name: "",
   currentFile: "",
+  startLine: -1,
 };
 
 async function getBooksPath(context: vscode.ExtensionContext) {
@@ -87,21 +88,30 @@ function showPage(index: number, context: vscode.ExtensionContext) {
   const line = currentBook.lines[index];
   const editor = vscode.window.activeTextEditor;
   if (!editor || !editor.document.fileName.endsWith("vscode-loaf.cpp")) return;
+  if (currentBook.startLine < 0) {
+    const text = editor.document.getText();
+    const m = text.match(/\/\*\*\*\*\*[\s\S]*\*\*\*\*\*\//);
+    if (!m) return;
+    const preText = text.slice(0, m.index);
+    currentBook.startLine = preText.match(/\r?\n/g)?.length || 0;
+  }
   const comment = `/*****
   ${line}
 *****/`;
-  const reg = /\/\*\*\*\*\*[\s\S]+\*\*\*\*\*\//;
-  const hasContent = reg.test(editor.document.getText());
-  editor.edit((editBuilder) => {
-    // 替换文档内容
-    const range = new vscode.Range(
-      0,
-      0,
-      hasContent ? 2 : 0,
-      hasContent ? 6 : 0
-    );
-    editBuilder.replace(range, comment + (hasContent ? "" : "\n"));
-  });
+  editor
+    .edit((editBuilder) => {
+      // 替换文档内容
+      const range = new vscode.Range(
+        currentBook.startLine,
+        0,
+        currentBook.startLine + 2,
+        editor.document.lineAt(currentBook.startLine + 2).text.length
+      );
+      return editBuilder.replace(range, comment);
+    })
+    .then(() => {
+      return editor.document.save();
+    });
 }
 
 function switchBook(context: vscode.ExtensionContext) {
@@ -179,33 +189,34 @@ function endLoaf(context: vscode.ExtensionContext) {
       currentLine: -1,
       name: "",
       currentFile: "",
+      startLine: currentBook.startLine,
     };
   }
   const editor = vscode.window.activeTextEditor;
 
   if (!editor || !editor.document.fileName.endsWith("vscode-loaf.cpp")) return;
-  const reg = /\.(html|vue)$/.test(editor.document.fileName)
-    ? /<-----[\s\S]+----->/
-    : /\/\*\*\*\*\*[\s\S]+\*\*\*\*\*\//;
-  const hasContent = reg.test(editor.document.getText());
-  if (hasContent) {
-    editor
-      .edit((editBuilder) => {
-        // 替换文档内容
-        const range = new vscode.Range(0, 0, 3, 0);
-        editBuilder.replace(range, "");
-      })
-      .then(() => {
-        return editor.document.save();
-      })
-      .then(() => {
-        vscode.commands.executeCommand("workbench.action.closeActiveEditor");
-      });
-  }
+  const reg = /\/\*\*\*\*\*[\s\S]*\*\*\*\*\*\//;
+  const text = editor.document.getText().replace(reg, `/**********/`);
+  editor
+    .edit((editBuilder) => {
+      // 替换文档内容
+      const range = new vscode.Range(
+        0,
+        0,
+        editor.document.lineCount - 1,
+        editor.document.lineAt(editor.document.lineCount - 1).text.length
+      );
+      return editBuilder.replace(range, text);
+    })
+    .then(() => {
+      return editor.document.save();
+    })
+    .then(() => {
+      vscode.commands.executeCommand("workbench.action.closeActiveEditor");
+    });
 }
 
 export function activate(context: vscode.ExtensionContext) {
-  console.log(111111111);
   context.subscriptions.push(
     vscode.commands.registerCommand("vscode-loaf.loafStart", () => {
       // vscode.window.showInformationMessage("Start loaf");
